@@ -1,4 +1,4 @@
-Deep.js - deep requests in JavaScript data
+### Deep.js - deep requests in JavaScript data
 
     var tweets = []; // typical twitter json
     deep(tweets, [{
