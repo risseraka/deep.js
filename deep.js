@@ -15,20 +15,20 @@ var is = (function () {
     return that;
 }());
 
-function rduce(obj, func, result) {
+function map(obj, func) {
     if (is.Array(obj)) {
-        return obj.reduce(func, result);
+        return obj.map(func);
     } else if (is.Object(obj)) {
-        var i;
+        var i, result = [];
 
         for (i in obj) {
             if (obj.hasOwnProperty(i)) {
-                result = func(result, obj[i], i, obj);
+                result.push(func(obj[i], i, obj));
             }
         }
         return result;
     }
-    throw "Illegal rduce on non object nor array variable";
+    throw "Illegal map on non object nor array variable";
 }
 
 var deep = (function () {
@@ -42,9 +42,9 @@ var deep = (function () {
     }
 
     function deepArr(obj, fields, up) {
-        return fields.map(
+        return map(fields,
             function (field) {
-                return obj.map(
+                return map(obj,
                     function (value) {
                         return deep(value, field, up);
                     }
@@ -54,17 +54,11 @@ var deep = (function () {
     }
 
     function deepObj(obj, fields, up) {
-        var result = rduce(
-            fields,
-            function (result, fields, key) {
-                var res = deep(obj[key], fields, up);
-
-                result.push(res);
-                return result;
-            },
-            []
+        return map(fields,
+            function (field, key) {
+                return deep(obj[key], field, up);
+            }
         );
-        return result;
     }
 
     return function deep(obj, fields, up) {
