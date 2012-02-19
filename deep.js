@@ -68,7 +68,7 @@ var deep = (function () {
     }
 
     return function deep(obj, fields, up) {
-        if (!fields) {
+        if (!fields || obj === undefined) {
             return obj;
         }
 
