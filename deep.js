@@ -220,11 +220,12 @@ var deep = (function buildDeep() {
 
     return function deep(obj, fields, up) {
         if (obj !== undefined &&
-                fields &&
+                fields !== undefined &&
                 count(fields) > 0) {
             var func;
 
-            if (is.String(fields)) {
+            if (is.String(fields) ||
+                    is.Number(fields)) {
                 func = deepString;
             } else if (is.Function(fields)) {
                 func = deepFunction;
