@@ -1,27 +1,10 @@
-/*global is, rduce, count, shift*/
-
-var is = (function () {
-    function buildTypeFunc(type) {
-        return function (obj) {
-            return Object.prototype.toString.call(obj) === "[object " + type + "]";
-        };
-    }
-
-    var that = {},
-        types = ["Array", "RegExp", "Date", "Number", "String", "Object", "Function"],
-        i,
-        j;
-
-    for (i = types.length - 1; i >= 0; i -= 1) {
-        that[types[i]] = buildTypeFunc(types[i]);
-    }
-    return that;
-}());
+/*global reduce, count, shift*/
 
 function feach(obj, func) {
-    if (is.Array(obj)) {
+    if (obj instanceof Array) {
         return obj.forEach(func);
-    } else if (is.Object(obj)) {
+    }
+    if (typeof obj === "object") {
         var key;
 
         for (key in obj) {
@@ -35,9 +18,10 @@ function feach(obj, func) {
 }
 
 function map(obj, func) {
-    if (is.Array(obj)) {
+    if (obj instanceof Array) {
         return obj.map(func);
-    } else if (is.Object(obj)) {
+    }
+    if (typeof obj === "object") {
         var key, result = [];
 
         for (key in obj) {
@@ -51,9 +35,10 @@ function map(obj, func) {
 }
 
 function rduce(obj, func, result) {
-    if (is.Array(obj)) {
+    if (obj instanceof Array) {
         return obj.reduce(func, result);
-    } else if (is.Object(obj)) {
+    }
+    if (typeof obj === "object") {
         var key;
 
         for (key in obj) {
@@ -67,10 +52,10 @@ function rduce(obj, func, result) {
 }
 
 function count(obj) {
-    if (is.Array(obj) || is.Object(obj)) {
+    if (obj instanceof Array || typeof obj === "object") {
         return rduce(
             obj,
-            function (total, el) {
+            function (total) {
                 return total + 1;
             },
             0
@@ -80,16 +65,16 @@ function count(obj) {
 }
 
 function unshift(obj, value) {
-    if (is.Array(obj)) {
-        if (is.Array(obj[0]) || is.Object(obj[0])) {
+    if (obj instanceof Array) {
+        if (obj[0] instanceof Array || typeof obj[0] === "object") {
             unshift(obj[0], value);
         } else {
             obj[0] = value;
         }
-    } else if (is.Object(obj)) {
+    } else if (typeof obj === "object") {
         rduce(obj,
             function (value, old, key, obj) {
-                if (is.Array(old) || is.Object(old)) {
+                if (old instanceof Array || typeof old === "object") {
                     unshift(old, value);
                 } else if (value !== undefined) {
                     obj[key] = value;
@@ -104,9 +89,10 @@ function unshift(obj, value) {
 }
 
 function shift(obj) {
-    if (is.Array(obj)) {
+    if (obj instanceof Array) {
         return obj.shift();
-    } else if (is.Object(obj)) {
+    }
+    if (typeof obj === "object") {
         return rduce(obj,
             function (result, value, key, obj) {
                 if (result === undefined) {
@@ -121,10 +107,11 @@ function shift(obj) {
 }
 
 function shiftKey(obj) {
-    if (is.Array(obj)) {
-        arr.shift();
+    if (obj instanceof Array) {
+        obj.shift();
         return 0;
-    } else if (is.Object(obj)) {
+    }
+    if (typeof obj === "object") {
         return rduce(obj,
             function (result, value, key, obj) {
                 if (result === undefined) {
@@ -154,7 +141,7 @@ var deep = (function buildDeep() {
             function (result, field) {
                 var res;
 
-                if (is.Array(obj) || is.Object(obj)) {
+                if (obj instanceof Array|| typeof obj === "object") {
                     res = map(
                         obj,
                         function (el) {
@@ -183,14 +170,14 @@ var deep = (function buildDeep() {
                 var temp = field !== "" ? obj[field] : obj,
                     res;
 
-                if (is.String(value)) {
+                if (typeof value === "string") {
                     if (up) {
                         return obj;
                     }
                     result[value || field] = temp;
                 } else {
                     res = deep(temp, value, up);
-                    if (is.Object(field) && is.Object(res)) {
+                    if (typeof field === "object" && typeof res === "object") {
                         result = merge(result, res);
                     } else {//if (res !== undefined) {
                         result[field] = res;
@@ -224,15 +211,15 @@ var deep = (function buildDeep() {
                 count(fields) > 0) {
             var func;
 
-            if (is.String(fields) ||
-                    is.Number(fields)) {
+            if (typeof fields === "string" ||
+                    typeof fields === "number") {
                 func = deepString;
-            } else if (is.Function(fields)) {
+            } else if (typeof fields === "function") {
                 func = deepFunction;
-            } else if (is.Object(fields)) {
-                func = deepObject;
-            } else if (is.Array(fields)) {
+            } else if (fields instanceof Array) {
                 func = deepArray;
+            } else if (typeof fields === "object") {
+                func = deepObject;
             }
             return func(obj, fields, up);
         }
