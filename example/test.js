@@ -1,4 +1,4 @@
-/*global deep, console, is*/
+/*global deep, console*/
 
 function buildTests(obj, test) {
     function plusOne(a) {
@@ -28,7 +28,7 @@ function buildTests(obj, test) {
     }
 
     var resArr;
-    if (is.Array(obj) || is.Object(obj)) {
+    if (obj instanceof Array || typeof obj === "object") {
         resArr = map(obj, identity);
         plusOnedMap = map(obj, plusOne);
         resLengthMap = map(obj, getLength);
@@ -111,7 +111,7 @@ function buildTests(obj, test) {
     var testArray = buildTest(
         [],
         values,
-        (is.Array(obj) || is.Object(obj)) ?
+        (obj instanceof Array || typeof obj === "object") ?
             [
                 resArr,
                 resArr,
@@ -131,7 +131,7 @@ function buildTests(obj, test) {
     var testArrayObject = buildTest(
         [{"": ""}],
         values,
-        (is.Array(obj) || is.Object(obj)) ?
+        (obj instanceof Array || typeof obj === "object") ?
             [
                 resArr,
                 resArr,
@@ -151,7 +151,7 @@ function buildTests(obj, test) {
     var testArrayArray = buildTest(
         ["", ""],
         values,
-        (is.Array(obj) || is.Object(obj)) ?
+        (obj instanceof Array || typeof obj === "object") ?
             [
                 [resArr, resArr],
                 [resArr, resArr],
@@ -171,7 +171,7 @@ function buildTests(obj, test) {
     var testArrayObjectLength = buildTest(
         [{"length": ""}],
         values,
-        (is.Array(obj) || is.Object(obj)) ?
+        (obj instanceof Array || typeof obj === "object") ?
             [
                 resLengthMap,
                 resLengthMap,
@@ -191,7 +191,7 @@ function buildTests(obj, test) {
     var testArrayObjectLengthToString = buildTest(
         [{"length": {"toString": ""}}],
         values,
-        (is.Array(obj) || is.Object(obj)) ?
+        (obj instanceof Array || typeof obj === "object") ?
             [
                 resLengthMap,
                 resLengthMap,
@@ -211,7 +211,7 @@ function buildTests(obj, test) {
     var testArrayArrayObjectLengthToString = buildTest(
         ["", {"length": {"toString": ""}}],
         values,
-        (is.Array(obj) || is.Object(obj)) ?
+        (obj instanceof Array || typeof obj === "object") ?
             [
                 [resArr, resLengthMap],
                 [resArr, resLengthMap],
@@ -245,7 +245,7 @@ function runTests(tests, detailed) {
                     if (params[0] !== undefined) {
                         actual = deep.apply(this, params);
 
-                        if (is.Function(expected)) {
+                        if (typeof expected === "function") {
                             passed = actual === expected;
                         } else {
                             passed = JSON.stringify(actual) === JSON.stringify(expected);
