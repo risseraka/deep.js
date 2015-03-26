@@ -1,5 +1,7 @@
 /*global reduce, count, shift*/
 
+'use strict';
+
 function feach(obj, func) {
     if (obj instanceof Array) {
         return obj.forEach(func);
@@ -209,7 +211,7 @@ var deep = (function buildDeep() {
         if (obj !== undefined &&
                 fields !== undefined &&
                 count(fields) > 0) {
-            var func;
+            var func = function () { return obj; };
 
             if (typeof fields === "string" ||
                     typeof fields === "number") {
@@ -226,3 +228,5 @@ var deep = (function buildDeep() {
         return obj;
     };
 }());
+
+module.exports = deep;

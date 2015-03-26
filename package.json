@@ -1,0 +1,25 @@
+{
+  "name": "deep.js",
+  "version": "0.0.1",
+  "description": "Deep ",
+  "main": "deep.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/risseraka/deep.js"
+  },
+  "author": {
+    "name": "Adrien Risser",
+    "email": "risseraka@gmail.com"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/risseraka/deep.js/issues"
+  },
+  "homepage": "https://github.com/risseraka/deep.js"
+}
